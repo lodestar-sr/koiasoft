@@ -1,15 +1,36 @@
-import { get } from '../../shared/api';
-import { BreedListModel } from '../../shared/models/breed-list.model';
-import { ResponseInterface } from '../../shared/interfaces/response.interface';
+import { post } from '../shared/config/api.config';
+import { ResponseInterface } from '../shared/interfaces/response.interface';
+import { RequestQueryInterface } from "../shared/interfaces/request-query.interface";
 
-export const getBreedListApi = (): Promise<
-  ResponseInterface<BreedListModel>
-> => {
-  return get<ResponseInterface<BreedListModel>>('/breeds/list/all');
-};
+export const getStatistics = (houseType: string, quarters: string[]): Promise<ResponseInterface> => {
+  const parameters: RequestQueryInterface = {
+    query: [
+      {
+        code: 'Boligtype',
+        selection: {
+          filter: 'item',
+          values: [houseType],
+        },
+      },
+      {
+        code: 'ContentsCode',
+        selection: {
+          filter: 'item',
+          values: ['KvPris'],
+        },
+      },
+      {
+        code: 'Tid',
+        selection: {
+          filter: 'item',
+          values: quarters,
+        },
+      },
+    ],
+    response: {
+      format: 'json-stat2',
+    },
+  };
 
-export const getBreedImageApi = (
-  breed: string
-): Promise<ResponseInterface<string>> => {
-  return get<ResponseInterface<string>>(`/breed/${breed}/images/random`);
+  return post<ResponseInterface, RequestQueryInterface>('/no/table/07241', parameters);
 };

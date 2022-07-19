@@ -1,7 +1,8 @@
-export type RequestQueryItemInterface = {
-  code: string;
-  selection: {
-    filter: string;
-    values: string[];
-  };
+import { RequestQueryItemInterface } from "./request-query-item.interface";
+
+export type RequestQueryInterface = {
+  query: RequestQueryItemInterface[];
+  response: {
+    format: string;
+  }
 };
